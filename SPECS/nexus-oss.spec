@@ -1,7 +1,7 @@
 Summary: Nexus manages software “artifacts” required for development, deployment, and provisioning.
 Name: nexus
-Version: 2.0.6
-Release: 1
+Version: 2.7.2
+Release: 03
 License: AGPL
 Group: unknown
 URL: http://nexus.sonatype.org/
@@ -11,11 +11,13 @@ AutoReqProv: no
 
 %define __os_install_post %{nil}
 
+%define debug_package %{nil}
+
 %description
 A package repository
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{version}-%{release}
 
 %build
 
@@ -41,7 +43,7 @@ mkdir -p $RPM_BUILD_ROOT/var/lib/nexus
 #sed -i -e 's#application-port=.*#application-port=80#g' $RPM_BUILD_ROOT/usr/share/%{name}/conf/plexus.properties
 
 # patch pid dir
-sed -i -e 's#PIDDIR=.*#PIDDIR=/var/run/#' $RPM_BUILD_ROOT/usr/share/%{name}/bin/jsw/linux-$arch/nexus
+sed -i -e 's#PIDDIR=.*#PIDDIR=/var/run/#' $RPM_BUILD_ROOT/usr/share/%{name}/bin/jsw/linux-$arch/wrapper
 
 # patch logfile
 mkdir -p $RPM_BUILD_ROOT/var/log/nexus
@@ -60,9 +62,10 @@ rm -rf $RPM_BUILD_ROOT
 /var/log/nexus
 
 %changelog
+* Tue Mar 4 2014 Chris Eineke <github@ei.ne.ke> - 2.7.2-03
+- Upgrade to 2.7.2-03
 * Thu Jul 13 2012 Mike Champion <mike.champion@gmail.com> - 2.0.6
 - Upgrade to 2.0.6
 * Thu Dec 22 2011 Jens Braeuer <braeuer.jens@googlemail.com> - 1.9.2.3-1
 - Initial packaging.
 - For now nexus will run as root and listen to port 80
-
